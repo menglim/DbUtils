@@ -4,9 +4,47 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.suorsdey</groupId>
+    <groupId>com.github.menglim</groupId>
     <artifactId>DbUtils</artifactId>
-    <version>1.0</version>
+    <version>1.2.1</version>
+
+    <packaging>jar</packaging>
+    <name>${project.artifactId}</name>
+    <description>Database Access Library</description>
+    <url>https://github.com/menglim/DbUtils</url>
+    <licenses>
+        <license>
+            <name>
+                The Unlicense
+            </name>
+            <url>https://unlicense.org</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Menglim</name>
+            <email>smaemenglim@gmail.com</email>
+            <organization>Github</organization>
+            <organizationUrl>https://github.com/menglim</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/menglim/DbUtils.git</connection>
+        <developerConnection>scm:git:git@github.com:menglim/DbUtils.git</developerConnection>
+        <url>https://github.com/menglim/DbUtils</url>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
 
     <properties>
         <logback.version>1.1.2</logback.version>
@@ -58,36 +96,36 @@
             <scope>provided</scope>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>com.oracle</groupId>-->
-<!--            <artifactId>ojdbc14</artifactId>-->
-<!--            <version>10.2.0.4.0</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.oracle</groupId>-->
+        <!--            <artifactId>ojdbc14</artifactId>-->
+        <!--            <version>10.2.0.4.0</version>-->
+        <!--        </dependency>-->
 
-<!--        <dependency>-->
-<!--            <groupId>com.oracle</groupId>-->
-<!--            <artifactId>ojdbc7</artifactId>-->
-<!--            <scope>system</scope>-->
-<!--            <systemPath>${project.basedir}/src/main/resources/lib/ojdbc14.jar</systemPath>-->
-<!--            <version>14</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.mysql</groupId>-->
-<!--            <artifactId>mysql-connector</artifactId>-->
-<!--            <scope>system</scope>-->
-<!--            <systemPath>${project.basedir}/src/main/resources/lib/mysql-connector.jar</systemPath>-->
-<!--            <version>5.0.8</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.suorsdey</groupId>-->
-<!--            <artifactId>MUtils</artifactId>-->
-<!--            <version>1.0</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.oracle</groupId>-->
+        <!--            <artifactId>ojdbc7</artifactId>-->
+        <!--            <scope>system</scope>-->
+        <!--            <systemPath>${project.basedir}/src/main/resources/lib/ojdbc14.jar</systemPath>-->
+        <!--            <version>14</version>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.mysql</groupId>-->
+        <!--            <artifactId>mysql-connector</artifactId>-->
+        <!--            <scope>system</scope>-->
+        <!--            <systemPath>${project.basedir}/src/main/resources/lib/mysql-connector.jar</systemPath>-->
+        <!--            <version>5.0.8</version>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.suorsdey</groupId>-->
+        <!--            <artifactId>MUtils</artifactId>-->
+        <!--            <version>1.0</version>-->
+        <!--            <scope>compile</scope>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>com.github.menglim</groupId>
             <artifactId>mutils</artifactId>
-            <version>1.1</version>
+            <version>1.2.1</version>
         </dependency>
 
         <dependency>
@@ -102,7 +140,73 @@
     <build>
         <directory>${user.home}/output/${project.groupId}.${project.artifactId}/target</directory>
         <outputDirectory>${user.home}/output/${project.groupId}.${project.artifactId}/classes</outputDirectory>
-        <testOutputDirectory>${user.home}/output/${project.groupId}.${project.artifactId}/test-classes</testOutputDirectory>
+        <testOutputDirectory>${user.home}/output/${project.groupId}.${project.artifactId}/test-classes
+        </testOutputDirectory>
+
+        <plugins>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 
 </project>
