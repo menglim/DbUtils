@@ -10,6 +10,7 @@ import org.bouncycastle.util.Strings;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -92,6 +93,9 @@ public class DbFactoryHelper<T> {
 
                 } else if (field.getType().equals(Date.class)) {
                     Date value = AppUtils.getInstance().getDate(rs.getString(fieldName), DbConnectionManager.getDateFormat(getConnectionIndex(newInstance)));
+                    BeanUtils.setProperty(newInstance, field.getName(), value);
+                } else if (field.getType().equals(BigDecimal.class)) {
+                    BigDecimal value = rs.getBigDecimal(fieldName);
                     BeanUtils.setProperty(newInstance, field.getName(), value);
                 } else {
                     log.error("Unknown datatype " + field.getType());
