@@ -1,6 +1,7 @@
 package com.github.menglim.dbutils;
 
 import com.github.menglim.dbutils.annotations.DbDataSource;
+import com.github.menglim.dbutils.annotations.DbDateFormat;
 import com.github.menglim.dbutils.annotations.DbField;
 import com.github.menglim.mutils.AppUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -61,6 +62,8 @@ public class DbFactoryHelper<T> {
                 if (odbcField.ignore()) continue;
                 fieldName = odbcField.value();
             }
+            Annotation dateFormatAnnotation = field.getAnnotation(DbDateFormat.class);
+
             try {
                 if (field.getType().equals(Integer.class) || field.getType().equals(int.class) || field.getType().equals(short.class)) {
                     Integer value = rs.getInt(fieldName);
@@ -73,6 +76,11 @@ public class DbFactoryHelper<T> {
                     BeanUtils.setProperty(newInstance, field.getName(), value);
                 } else if (field.getType().equals(String.class)) {
                     String value = rs.getString(fieldName);
+                    if (dateFormatAnnotation != null) {
+                        value = value.replace(" 00:00:00.0", "");
+                        DbDateFormat dbDateFormat = (DbDateFormat) dateFormatAnnotation;
+                        value = AppUtils.getInstance().toDate(value, dbDateFormat.fromFormatDate(), dbDateFormat.toFormatDate());
+                    }
                     BeanUtils.setProperty(newInstance, field.getName(), value);
                 } else if (field.getType().equals(Boolean.class) || field.getType().equals(boolean.class)) {
                     String value = rs.getString(fieldName);
