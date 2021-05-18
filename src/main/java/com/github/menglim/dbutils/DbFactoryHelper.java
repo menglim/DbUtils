@@ -77,8 +77,13 @@ public class DbFactoryHelper<T> {
                 } else if (field.getType().equals(String.class)) {
                     String value = rs.getString(fieldName);
                     if (dateFormatAnnotation != null) {
-                        value = value.replace(" 00:00:00.0", "");
                         DbDateFormat dbDateFormat = (DbDateFormat) dateFormatAnnotation;
+                        switch (dbDateFormat.fromFormatDate()) {
+                            case YYYYMMDD:
+                            case MMDDYYYY:
+                            case DDMMYYYY:
+                                value = value.substring(0, 8 + (dbDateFormat.fromDateSeparator().length() + dbDateFormat.fromDateSeparator().length()));
+                        }
                         value = AppUtils.getInstance().toDate(value, dbDateFormat.fromFormatDate(), dbDateFormat.toFormatDate());
                     }
                     BeanUtils.setProperty(newInstance, field.getName(), value);

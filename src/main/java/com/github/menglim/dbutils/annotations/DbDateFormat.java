@@ -12,4 +12,6 @@ public @interface DbDateFormat {
     String toFormatDate() default "";
 
     Constants.FormatDate fromFormatDate() default Constants.FormatDate.DDMMYYYY;
+
+    String fromDateSeparator() default "-";
 }

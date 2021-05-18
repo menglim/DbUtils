@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 @Data
-public class  DbConnectionManager {
+public class DbConnectionManager {
 
     private static HashMap<Integer, String> connectionString; //jdbc:oracle:thin:@uat.fast.bicbank.net:1521:XE
     private static HashMap<Integer, String> username;
@@ -72,6 +72,7 @@ public class  DbConnectionManager {
                     break;
                 case Oracle:
                     Class.forName("oracle.jdbc.driver.OracleDriver");
+//                    Class.forName("oracle.jdbc.OracleDriver");
                     break;
                 default:
                     throw new NotImplementedException();
