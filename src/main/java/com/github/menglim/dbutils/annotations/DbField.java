@@ -16,4 +16,6 @@ public @interface DbField {
     boolean updateField() default true;
 
     boolean ignore() default false;
+
+    String defaultValueIfNull() default "";
 }

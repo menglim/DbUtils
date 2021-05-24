@@ -56,14 +56,15 @@ public class DbFactoryHelper<T> {
         Field[] fields = newInstance.getClass().getDeclaredFields();
         for (Field field : fields) {
             String fieldName = field.getName();
+            String defaultFieldValue = null;
             Annotation fieldAnnotation = field.getAnnotation(DbField.class);
             if (fieldAnnotation != null) {
                 DbField odbcField = (DbField) fieldAnnotation;
                 if (odbcField.ignore()) continue;
                 fieldName = odbcField.value();
+                defaultFieldValue = odbcField.defaultValueIfNull().equalsIgnoreCase("") ? null : odbcField.defaultValueIfNull();
             }
             Annotation dateFormatAnnotation = field.getAnnotation(DbDateFormat.class);
-
             try {
                 if (field.getType().equals(Integer.class) || field.getType().equals(int.class) || field.getType().equals(short.class)) {
                     Integer value = rs.getInt(fieldName);
@@ -76,17 +77,21 @@ public class DbFactoryHelper<T> {
                     BeanUtils.setProperty(newInstance, field.getName(), value);
                 } else if (field.getType().equals(String.class)) {
                     String value = rs.getString(fieldName);
-                    if (dateFormatAnnotation != null) {
-                        DbDateFormat dbDateFormat = (DbDateFormat) dateFormatAnnotation;
-                        switch (dbDateFormat.fromFormatDate()) {
-                            case YYYYMMDD:
-                            case MMDDYYYY:
-                            case DDMMYYYY:
-                                value = value.substring(0, 8 + (dbDateFormat.fromDateSeparator().length() + dbDateFormat.fromDateSeparator().length()));
+                    if (AppUtils.getInstance().nonNull(value)) {
+                        if (dateFormatAnnotation != null) {
+                            DbDateFormat dbDateFormat = (DbDateFormat) dateFormatAnnotation;
+                            switch (dbDateFormat.fromFormatDate()) {
+                                case YYYYMMDD:
+                                case MMDDYYYY:
+                                case DDMMYYYY:
+                                    value = value.substring(0, 8 + (dbDateFormat.fromDateSeparator().length() + dbDateFormat.fromDateSeparator().length()));
+                            }
+                            value = AppUtils.getInstance().toDate(value, dbDateFormat.fromFormatDate(), dbDateFormat.toFormatDate());
                         }
-                        value = AppUtils.getInstance().toDate(value, dbDateFormat.fromFormatDate(), dbDateFormat.toFormatDate());
+                        BeanUtils.setProperty(newInstance, field.getName(), value);
+                    } else {
+                        BeanUtils.setProperty(newInstance, field.getName(), defaultFieldValue);
                     }
-                    BeanUtils.setProperty(newInstance, field.getName(), value);
                 } else if (field.getType().equals(Boolean.class) || field.getType().equals(boolean.class)) {
                     String value = rs.getString(fieldName);
                     if (Objects.isNull(value)) {
