@@ -1,6 +1,7 @@
 package com.github.menglim.dbutils;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.Connection;
@@ -9,6 +10,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 @Data
+@Slf4j
 public class DbConnectionManager {
 
     private static HashMap<Integer, String> connectionString; //jdbc:oracle:thin:@uat.fast.bicbank.net:1521:XE
@@ -77,10 +79,12 @@ public class DbConnectionManager {
                 default:
                     throw new NotImplementedException();
             }
+            log.debug("Trying to connect " + connectionString.get(connectionIndex));
             Connection connection = DriverManager.getConnection(connectionString.get(connectionIndex)
                     , username.get(connectionIndex)
                     , password.get(connectionIndex)
             );
+            log.debug("Connected to " + connectionString.get(connectionIndex));
             return connection;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

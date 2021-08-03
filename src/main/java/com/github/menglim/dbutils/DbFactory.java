@@ -37,8 +37,9 @@ public class DbFactory<T> implements Factory<T> {
             baseObjectModel = (BaseObjectModel<T>) newInstance;
             int connectionIndex = _factoryHelper.getConnectionIndex(newInstance);
             String tableName = _factoryHelper.getTableName(newInstance);
+            Connection connection = DbConnectionManager.getConnection(connectionIndex);
             try {
-                Connection connection = DbConnectionManager.getConnection(connectionIndex);
+
                 String sql = "SELECT * FROM " + tableName;
                 if (conditionBuilder != null) {
                     sql = sql + conditionBuilder.build();
@@ -46,6 +47,7 @@ public class DbFactory<T> implements Factory<T> {
                 if (orderBuilder != null) {
                     sql = sql + orderBuilder.build();
                 }
+                log.debug("Executing Sql => " + sql);
                 NamedParameterStatement statement = new NamedParameterStatement(connection, sql);
                 if (conditionBuilder != null) {
                     _factoryHelper.setParameters(statement, (T) conditionBuilder.getInstance());
@@ -58,7 +60,6 @@ public class DbFactory<T> implements Factory<T> {
                 }
                 rs.close();
                 statement.close();
-                connection.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -67,6 +68,15 @@ public class DbFactory<T> implements Factory<T> {
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    try {
+                        connection.close();
+                        log.debug("Connection is closed");
+                    } catch (SQLException ex1) {
+                        ex1.printStackTrace();
+                    }
+                }
             }
         }
         return list;
@@ -84,14 +94,16 @@ public class DbFactory<T> implements Factory<T> {
         } else {
             baseObjectModel = (BaseObjectModel<T>) newInstance;
             int connectionIndex = _factoryHelper.getConnectionIndex(newInstance);
+            Connection connection = DbConnectionManager.getConnection(connectionIndex);
             try {
-                Connection connection = DbConnectionManager.getConnection(connectionIndex);
+
                 if (conditionBuilder != null) {
                     sql = sql + conditionBuilder.build();
                 }
                 if (orderBuilder != null) {
                     sql = sql + orderBuilder.build();
                 }
+                log.debug("Executing Sql => " + sql);
                 NamedParameterStatement statement = new NamedParameterStatement(connection, sql);
                 if (conditionBuilder != null) {
                     _factoryHelper.setParameters(statement, (T) conditionBuilder.getInstance());
@@ -102,7 +114,6 @@ public class DbFactory<T> implements Factory<T> {
                 }
                 rs.close();
                 statement.close();
-                connection.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -111,6 +122,15 @@ public class DbFactory<T> implements Factory<T> {
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    try {
+                        connection.close();
+                        log.debug("Connection is closed");
+                    } catch (SQLException ex1) {
+                        ex1.printStackTrace();
+                    }
+                }
             }
         }
         return list;
@@ -129,8 +149,9 @@ public class DbFactory<T> implements Factory<T> {
             baseObjectModel = (BaseObjectModel<T>) newInstance;
             int connectionIndex = _factoryHelper.getConnectionIndex(newInstance);
             String tableName = _factoryHelper.getTableName(newInstance);
+            Connection connection = DbConnectionManager.getConnection(connectionIndex);
             try {
-                Connection connection = DbConnectionManager.getConnection(connectionIndex);
+
                 String sql = "SELECT * FROM " + tableName;
                 if (conditionBuilder != null) {
                     sql = sql + conditionBuilder.build();
@@ -138,6 +159,7 @@ public class DbFactory<T> implements Factory<T> {
                 if (orderBuilder != null) {
                     sql = sql + orderBuilder.build();
                 }
+                log.debug("Executing Sql => " + sql);
                 NamedParameterStatement statement = new NamedParameterStatement(connection, sql);
                 if (conditionBuilder != null) {
                     _factoryHelper.setParameters(statement, (T) conditionBuilder.getInstance());
@@ -157,6 +179,15 @@ public class DbFactory<T> implements Factory<T> {
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    try {
+                        connection.close();
+                        log.debug("Connection is closed");
+                    } catch (SQLException ex1) {
+                        ex1.printStackTrace();
+                    }
+                }
             }
         }
         return list;
@@ -180,8 +211,9 @@ public class DbFactory<T> implements Factory<T> {
         } else {
             baseObjectModel = (BaseObjectModel<T>) newInstance;
             int connectionIndex = _factoryHelper.getConnectionIndex(newInstance);
+            Connection connection = DbConnectionManager.getConnection(connectionIndex);
             try {
-                Connection connection = DbConnectionManager.getConnection(connectionIndex);
+                log.debug("Executing Sql => " + sql);
                 NamedParameterStatement statement = new NamedParameterStatement(connection, sql);
                 ResultSet rs = statement != null ? statement.executeQuery() : null;
                 while (rs.next()) {
@@ -193,6 +225,15 @@ public class DbFactory<T> implements Factory<T> {
                 connection.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    try {
+                        connection.close();
+                        log.debug("Connection is closed");
+                    } catch (SQLException ex1) {
+                        ex1.printStackTrace();
+                    }
+                }
             }
         }
         return newInstance;
@@ -209,8 +250,9 @@ public class DbFactory<T> implements Factory<T> {
         } else {
             baseObjectModel = (BaseObjectModel<T>) newInstance;
             int connectionIndex = _factoryHelper.getConnectionIndex(newInstance);
+            Connection connection = DbConnectionManager.getConnection(connectionIndex);
             try {
-                Connection connection = DbConnectionManager.getConnection(connectionIndex);
+                log.debug("Executing Sql => " + sql);
                 NamedParameterStatement statement = new NamedParameterStatement(connection, sql);
                 ResultSet rs = statement != null ? statement.executeQuery() : null;
                 while (rs.next()) {
@@ -222,6 +264,15 @@ public class DbFactory<T> implements Factory<T> {
                 connection.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    try {
+                        connection.close();
+                        log.debug("Connection is closed");
+                    } catch (SQLException ex1) {
+                        ex1.printStackTrace();
+                    }
+                }
             }
         }
         return newInstance;
@@ -245,9 +296,10 @@ public class DbFactory<T> implements Factory<T> {
         } else {
             baseObjectModel = (BaseObjectModel<T>) newInstance;
             int connectionIndex = _factoryHelper.getConnectionIndex(newInstance);
+            Connection connection = DbConnectionManager.getConnection(connectionIndex);
             try {
-                Connection connection = DbConnectionManager.getConnection(connectionIndex);
                 String sql = "SELECT * FROM " + _factoryHelper.getTableName(newInstance);
+                log.debug("Executing Sql => " + sql);
                 if (orderBuilder != null) {
                     sql = sql + orderBuilder.build();
                 }
@@ -259,9 +311,17 @@ public class DbFactory<T> implements Factory<T> {
                 }
                 rs.close();
                 statement.close();
-                connection.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    try {
+                        connection.close();
+                        log.debug("Connection is closed");
+                    } catch (SQLException ex1) {
+                        ex1.printStackTrace();
+                    }
+                }
             }
         }
         return newInstance;
@@ -288,12 +348,13 @@ public class DbFactory<T> implements Factory<T> {
         } else {
             baseObjectModel = (BaseObjectModel<T>) newInstance;
             int connectionIndex = _factoryHelper.getConnectionIndex(newInstance);
+            Connection connection = DbConnectionManager.getConnection(connectionIndex);
             try {
-                Connection connection = DbConnectionManager.getConnection(connectionIndex);
                 String sql = "SELECT * FROM " + _factoryHelper.getTableName(newInstance);
                 if (orderBuilder != null) {
                     sql = sql + orderBuilder.build();
                 }
+                log.debug("Executing Sql => " + sql);
                 NamedParameterStatement statement = new NamedParameterStatement(connection, sql);
                 ResultSet rs = statement != null ? statement.executeQuery() : null;
                 while (rs.next()) {
@@ -302,9 +363,17 @@ public class DbFactory<T> implements Factory<T> {
                 }
                 rs.close();
                 statement.close();
-                connection.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    try {
+                        connection.close();
+                        log.debug("Connection is closed");
+                    } catch (SQLException ex1) {
+                        ex1.printStackTrace();
+                    }
+                }
             }
         }
         return newInstance;
@@ -330,10 +399,12 @@ public class DbFactory<T> implements Factory<T> {
             }
             baseObjectModel = (BaseObjectModel<T>) newInstance;
             int connectionIndex = _factoryHelper.getConnectionIndex(newInstance);
+            Connection connection = DbConnectionManager.getConnection(connectionIndex);
             try {
                 String primaryKeyValue = BeanUtils.getProperty(newInstance, primaryKeyField.getName());
-                Connection connection = DbConnectionManager.getConnection(connectionIndex);
+
                 String sql = "SELECT * FROM " + _factoryHelper.getTableName(newInstance) + " WHERE " + _factoryHelper.getFieldName(newInstance, primaryKeyField.getName()) + "=" + primaryKeyValue;
+                log.debug("Executing Sql => " + sql);
                 NamedParameterStatement statement = new NamedParameterStatement(connection, sql);
                 ResultSet rs = statement != null ? statement.executeQuery() : null;
                 while (rs.next()) {
@@ -342,7 +413,6 @@ public class DbFactory<T> implements Factory<T> {
                 }
                 rs.close();
                 statement.close();
-                connection.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -351,6 +421,15 @@ public class DbFactory<T> implements Factory<T> {
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    try {
+                        connection.close();
+                        log.debug("Connection is closed");
+                    } catch (SQLException ex1) {
+                        ex1.printStackTrace();
+                    }
+                }
             }
         }
         return newInstance;
@@ -378,10 +457,12 @@ public class DbFactory<T> implements Factory<T> {
             }
             baseObjectModel = (BaseObjectModel<T>) newInstance;
             int connectionIndex = _factoryHelper.getConnectionIndex(newInstance);
+            Connection connection = DbConnectionManager.getConnection(connectionIndex);
             try {
                 String primaryKeyValue = BeanUtils.getProperty(newInstance, primaryKeyField.getName());
-                Connection connection = DbConnectionManager.getConnection(connectionIndex);
+
                 String sql = "SELECT * FROM " + _factoryHelper.getTableName(newInstance) + " WHERE " + _factoryHelper.getFieldName(newInstance, primaryKeyField.getName()) + "=" + primaryKeyValue;
+                log.debug("Executing Sql => " + sql);
                 NamedParameterStatement statement = new NamedParameterStatement(connection, sql);
                 ResultSet rs = statement != null ? statement.executeQuery() : null;
                 while (rs.next()) {
@@ -390,7 +471,6 @@ public class DbFactory<T> implements Factory<T> {
                 }
                 rs.close();
                 statement.close();
-                connection.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -399,6 +479,15 @@ public class DbFactory<T> implements Factory<T> {
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    try {
+                        connection.close();
+                        log.debug("Connection is closed");
+                    } catch (SQLException ex1) {
+                        ex1.printStackTrace();
+                    }
+                }
             }
         }
         return newInstance;
@@ -424,8 +513,9 @@ public class DbFactory<T> implements Factory<T> {
         } else {
             baseObjectModel = (BaseObjectModel<T>) newInstance;
             int connectionIndex = _factoryHelper.getConnectionIndex(newInstance);
+            Connection connection = DbConnectionManager.getConnection(connectionIndex);
             try {
-                Connection connection = DbConnectionManager.getConnection(connectionIndex);
+                log.debug("Executing Sql => " + sql);
                 NamedParameterStatement statement = new NamedParameterStatement(connection, sql);
                 if (conditionBuilder != null) {
                     _factoryHelper.setParameters(statement, (T) conditionBuilder.getInstance());
@@ -436,7 +526,6 @@ public class DbFactory<T> implements Factory<T> {
                 }
                 rs.close();
                 statement.close();
-                connection.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -445,6 +534,15 @@ public class DbFactory<T> implements Factory<T> {
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    try {
+                        connection.close();
+                        log.debug("Connection is closed");
+                    } catch (SQLException ex1) {
+                        ex1.printStackTrace();
+                    }
+                }
             }
         }
         return list;
