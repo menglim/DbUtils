@@ -85,9 +85,13 @@ public class DbFactoryHelper<T> {
                                 case MMDDYYYY:
                                 case DDMMYYYY:
                                     value = value.substring(0, 8 + (dbDateFormat.fromDateSeparator().length() + dbDateFormat.fromDateSeparator().length()));
+                                    break;
+                                default:
+                                    value = AppUtils.getInstance().toDate(value, dbDateFormat.fromFormatDate(), dbDateFormat.toFormatDate());
+                                    break;
                             }
-                            value = AppUtils.getInstance().toDate(value, dbDateFormat.fromFormatDate(), dbDateFormat.toFormatDate());
                         }
+
                         BeanUtils.setProperty(newInstance, field.getName(), value);
                     } else {
                         BeanUtils.setProperty(newInstance, field.getName(), defaultFieldValue);
