@@ -106,6 +106,9 @@ public class DbFactoryHelper<T> {
                         case "Y":
                         case "YES":
                         case "TRUE":
+                        case "SUCCESS":
+                        case "ACTIVE":
+                        case "1":
                             BeanUtils.setProperty(newInstance, field.getName(), true);
                             break;
                         default:

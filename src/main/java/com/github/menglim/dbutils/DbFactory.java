@@ -557,6 +557,7 @@ public class DbFactory<T> implements Factory<T> {
             baseObjectModel = (BaseObjectModel<T>) newInstance;
             int connectionIndex = _factoryHelper.getConnectionIndex(newInstance);
             Connection connection = DbConnectionManager.getConnection(connectionIndex);
+            log.debug("Executing Sql => " + sql);
             NamedParameterStatement statement = new NamedParameterStatement(connection, sql);
             if (conditionBuilder != null) {
                 _factoryHelper.setParameters(statement, (T) conditionBuilder.getInstance());
@@ -590,7 +591,7 @@ public class DbFactory<T> implements Factory<T> {
             String sql = "";
             if (AppUtils.getInstance().isNull(primaryKeyValue)) {
                 sql = _factoryHelper.getInsertSql(newInstance);
-//                System.out.println("Sql => " + sql);
+                log.debug("Executing Sql => " + sql);
                 connection = DbConnectionManager.getConnection(connectionIndex);
                 preparedStmt = new NamedParameterStatement(Objects.requireNonNull(connection), sql, Statement.RETURN_GENERATED_KEYS);
                 preparedStmt = _factoryHelper.setParameters(preparedStmt, newInstance);
@@ -608,7 +609,7 @@ public class DbFactory<T> implements Factory<T> {
                 BeanUtils.setProperty(newInstance, primaryKeyField.getName(), lastInsertKey);
             } else {
                 sql = _factoryHelper.getUpdateSql(newInstance);
-//                System.out.println("Sql => " + sql);
+                log.debug("Executing Sql => " + sql);
                 connection = DbConnectionManager.getConnection(connectionIndex);
                 preparedStmt = new NamedParameterStatement(Objects.requireNonNull(connection), sql);
                 preparedStmt = _factoryHelper.setParameters(preparedStmt, newInstance);
