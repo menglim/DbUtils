@@ -3,7 +3,7 @@ package com.github.menglim.dbutils;
 import com.github.menglim.dbutils.annotations.DbDateFormat;
 import com.github.menglim.dbutils.annotations.DbField;
 import com.github.menglim.dbutils.interfaces.BaseObjectModel;
-import com.github.menglim.mutils.Constants;
+import com.github.menglim.mutils.CoreConstants;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,7 +16,7 @@ public class CustomerInformation implements BaseObjectModel<CustomerInformation>
     private Long cifKey;
 
     @DbField("CIFCRTDT")
-    @DbDateFormat(fromFormatDate = Constants.FormatDate.YYYYMMDD, toFormatDate = "dd/MM/yyyy")
+    @DbDateFormat(fromFormatDate = CoreConstants.FormatDate.YYYYMMDD, toFormatDate = "dd/MM/yyyy")
     private String createdDate;
 
     @Override

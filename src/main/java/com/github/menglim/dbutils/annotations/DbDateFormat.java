@@ -1,6 +1,7 @@
 package com.github.menglim.dbutils.annotations;
 
-import com.github.menglim.mutils.Constants;
+
+import com.github.menglim.mutils.CoreConstants;
 
 import java.lang.annotation.*;
 
@@ -11,7 +12,7 @@ public @interface DbDateFormat {
 
     String toFormatDate() default "";
 
-    Constants.FormatDate fromFormatDate() default Constants.FormatDate.DDMMYYYY;
+    CoreConstants.FormatDate fromFormatDate() default CoreConstants.FormatDate.DDMMYYYY;
 
     String fromDateSeparator() default "-";
 }
