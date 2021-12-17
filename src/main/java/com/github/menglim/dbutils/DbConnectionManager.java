@@ -74,7 +74,10 @@ public class DbConnectionManager {
                     break;
                 case Oracle:
                     Class.forName("oracle.jdbc.driver.OracleDriver");
-//                    Class.forName("oracle.jdbc.OracleDriver");
+//                    Class.forName("oracle.jdbc.OracleDriver");//Not working for 19c. Lower version is OK
+                    break;
+                case PostgreSQL:
+                    Class.forName("org.postgresql.Driver");
                     break;
                 default:
                     throw new NotImplementedException();
@@ -96,5 +99,14 @@ public class DbConnectionManager {
 
     static String getDateFormat(int connectionIndex) {
         return dateFormat.get(connectionIndex);
+    }
+
+    public static boolean testIsConnected(int connectionIndex) {
+        Connection connection = getConnection(connectionIndex);
+        if (connection == null) {
+            System.err.println("Connection is error");
+            return false;
+        }
+        return true;
     }
 }
