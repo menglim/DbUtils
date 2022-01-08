@@ -177,7 +177,7 @@ public class DbFactoryHelper<T> {
             Annotation fieldAnn = field.getAnnotation(DbField.class);
             if (fieldAnn != null) {
                 DbField odbcField = (DbField) fieldAnn;
-                if (odbcField.ignore()) continue;
+                //if (odbcField.ignore()) continue;
                 if (odbcField.updateField() && !odbcField.primaryKey()) {
                     fieldName = AppUtils.getInstance().isNull(odbcField.value()) ? field.getName() : odbcField.value();
                     updateField = updateField + fieldName + "=:" + fieldName + ",";
@@ -232,7 +232,7 @@ public class DbFactoryHelper<T> {
             Annotation fieldAnn = field.getAnnotation(DbField.class);
             if (fieldAnn != null) {
                 DbField odbcField = (DbField) fieldAnn;
-                if (odbcField.ignore()) continue;
+                //if (odbcField.ignore()) continue;
                 if (odbcField.insertField() || odbcField.updateField()) {
                     fieldName = AppUtils.getInstance().isNull(odbcField.value()) ? field.getName() : odbcField.value();
                     if (field.getType().equals(Integer.class) || field.getType().equals(int.class) || field.getType().equals(short.class)) {
@@ -247,6 +247,8 @@ public class DbFactoryHelper<T> {
                     } else if (field.getType().equals(String.class)) {
                         if (AppUtils.getInstance().nonNull(BeanUtils.getProperty(newInstance, field.getName())))
                             preparedStmt.setString("" + fieldName, BeanUtils.getProperty(newInstance, field.getName()));
+                        else
+                            preparedStmt.setString("" + fieldName, null);
                     } else if (field.getType().equals(Boolean.class) || field.getType().equals(boolean.class)) {
                         if (AppUtils.getInstance().nonNull(BeanUtils.getProperty(newInstance, field.getName())))
                             switch (Strings.toUpperCase(BeanUtils.getProperty(newInstance, field.getName())).trim()) {
