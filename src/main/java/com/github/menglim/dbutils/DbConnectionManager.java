@@ -82,12 +82,12 @@ public class DbConnectionManager {
                 default:
                     throw new NotImplementedException();
             }
-            log.debug("Trying to connect " + connectionString.get(connectionIndex));
+            log.info("Trying to connect " + connectionString.get(connectionIndex));
             Connection connection = DriverManager.getConnection(connectionString.get(connectionIndex)
                     , username.get(connectionIndex)
                     , password.get(connectionIndex)
             );
-            log.debug("Connected to " + connectionString.get(connectionIndex));
+            log.info("Connected to " + connectionString.get(connectionIndex));
             return connection;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
