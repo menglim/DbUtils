@@ -121,7 +121,7 @@ public class DbFactoryHelper<T> {
                     BeanUtils.setProperty(newInstance, field.getName(), value);
                 } else if (field.getType().equals(BigDecimal.class)) {
                     BigDecimal value = rs.getBigDecimal(fieldName);
-                    BeanUtils.setProperty(newInstance, field.getName(), value);
+                    BeanUtils.setProperty(newInstance, field.getName(), (value == null ? BigDecimal.ZERO : value));
                 } else if (field.getType().equals(byte[].class)) {
                     byte[] value = rs.getBytes(fieldName);
                     BeanUtils.setProperty(newInstance, field.getName(), value);

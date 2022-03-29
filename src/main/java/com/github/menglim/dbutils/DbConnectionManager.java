@@ -7,6 +7,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 
 @Data
@@ -108,5 +109,16 @@ public class DbConnectionManager {
             return false;
         }
         return true;
+    }
+
+    public static boolean executeNonQuery(int connectionIndex, String query) {
+        try {
+            Connection connection = getConnection(connectionIndex);
+            Statement statement = connection.createStatement();
+            return statement.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
