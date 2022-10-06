@@ -66,7 +66,7 @@ public class DbConnectionManager {
         DbConnectionManager.dateFormat.put(connectionIndex, dateFormat);
     }
 
-    static Connection getConnection(int connectionIndex) {
+    public static Connection getConnection(int connectionIndex) {
         try {
             DbType selectedDbSupport = dbSupport.get(connectionIndex);
             switch (selectedDbSupport) {
