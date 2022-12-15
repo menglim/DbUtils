@@ -58,8 +58,9 @@ public class DbFactoryHelper<T> {
             String fieldName = field.getName();
             String defaultFieldValue = null;
             Annotation fieldAnnotation = field.getAnnotation(DbField.class);
+            DbField odbcField = null;
             if (fieldAnnotation != null) {
-                DbField odbcField = (DbField) fieldAnnotation;
+                odbcField = (DbField) fieldAnnotation;
                 if (odbcField.ignore()) continue;
                 fieldName = odbcField.value();
                 defaultFieldValue = odbcField.defaultValueIfNull().equalsIgnoreCase("") ? null : odbcField.defaultValueIfNull();
@@ -117,7 +118,13 @@ public class DbFactoryHelper<T> {
                     }
 
                 } else if (field.getType().equals(Date.class)) {
-                    Date value = AppUtils.getInstance().getDate(rs.getString(fieldName), DbConnectionManager.getDateFormat(getConnectionIndex(newInstance)));
+                    String formatter = DbConnectionManager.getDateFormat(getConnectionIndex(newInstance));
+                    if (odbcField != null) {
+                        if (AppUtils.getInstance().nonNull(odbcField.formatter())) {
+                            formatter = odbcField.formatter();
+                        }
+                    }
+                    Date value = AppUtils.getInstance().getDate(rs.getString(fieldName), formatter);
                     BeanUtils.setProperty(newInstance, field.getName(), value);
                 } else if (field.getType().equals(BigDecimal.class)) {
                     BigDecimal value = rs.getBigDecimal(fieldName);

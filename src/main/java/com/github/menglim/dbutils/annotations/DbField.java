@@ -17,5 +17,7 @@ public @interface DbField {
 
     boolean ignore() default false;
 
+    String formatter() default "";
+
     String defaultValueIfNull() default "";
 }
