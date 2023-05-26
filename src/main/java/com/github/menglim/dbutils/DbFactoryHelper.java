@@ -124,8 +124,13 @@ public class DbFactoryHelper<T> {
                             formatter = odbcField.formatter();
                         }
                     }
-                    Date value = AppUtils.getInstance().getDate(rs.getString(fieldName), formatter);
-                    BeanUtils.setProperty(newInstance, field.getName(), value);
+                    String valueString = rs.getString(fieldName);
+                    if (AppUtils.getInstance().nonNull(valueString)) {
+                        Date value = AppUtils.getInstance().getDate(valueString, formatter);
+                        BeanUtils.setProperty(newInstance, field.getName(), value);
+                    } else {
+                        BeanUtils.setProperty(newInstance, field.getName(), null);
+                    }
                 } else if (field.getType().equals(BigDecimal.class)) {
                     BigDecimal value = rs.getBigDecimal(fieldName);
                     BeanUtils.setProperty(newInstance, field.getName(), value);
